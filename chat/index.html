@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welkom bij Chat.benjamintjoa.com</title>
   <link rel="icon" href="/images/ico.ico" type="image/x-icon">
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3WPSN8WBPM"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-3WPSN8WBPM');
+</script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500&display=swap');
     
@@ -239,6 +248,13 @@
         messageInput.value = "";
       }
     });
+
+    document.getElementById("messageInput").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("sendBtn").click();
+  }
+});
 
     const leerlingen = {
             "2223069": { voornaam: "Linde", achternaam: "Constandse" },

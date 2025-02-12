@@ -92,6 +92,11 @@
       color: transparent;
       display: inline-block;
     }
+    .timestamp {
+      color: #b0b0b0;
+      font-size: 0.8rem;
+      margin-left: 10px;
+    }
     #welcome-screen {
       display: none;
       background-color: #000000;
@@ -191,7 +196,6 @@
     <h1>Chat.Benjamintjoa.com</h1>
     <h1>2E</h1>
     <div id="chatbox"></div>
-    <!-- Nieuwe container voor input en verzendknop -->
     <div class="chat-input-container">
       <input type="text" id="messageInput" placeholder="Typ een bericht...">
       <button id="sendBtn"><i class="fa-solid fa-paper-plane"></i></button>
@@ -241,7 +245,12 @@
       onChildAdded(chatRef, snapshot => {
         const msg = snapshot.val();
         const msgElement = document.createElement("p");
-        msgElement.innerText = `${msg.user}: ${msg.text}`;
+        let displayTime = "";
+        if (msg.timestamp) {
+          const parts = msg.timestamp.split(":");
+          displayTime = parts[0] + ":" + parts[1];
+        }
+        msgElement.innerHTML = `<strong>${msg.user}</strong>: ${msg.text} <span class="timestamp">${displayTime}</span>`;
         chatbox.appendChild(msgElement);
         chatbox.scrollTop = chatbox.scrollHeight;
       });
@@ -250,11 +259,33 @@
     document.getElementById("sendBtn").addEventListener("click", () => {
       const messageInput = document.getElementById("messageInput");
       const message = messageInput.value.trim();
-      if (message !== "" && currentUsername !== "") {
-        push(chatRef, {
-          user: currentUsername,
-          text: message
-        });
+      if (message !== "" && currentUsername !== "") {fetch("http://worldtimeapi.org/api/timezone/Europe/Amsterdam")
+          .then(response => response.json())
+          .then(data => {
+            const isoTime = data.datetime;
+            const time = new Date(isoTime);
+            const hours = time.getHours().toString().padStart(2, '0');
+            const minutes = time.getMinutes().toString().padStart(2, '0');
+            const seconds = time.getSeconds().toString().padStart(2, '0');
+            const fullTime = `${hours}:${minutes}:${seconds}`;
+            push(chatRef, {
+              user: currentUsername,
+              text: message,
+              timestamp: fullTime
+            });
+          })
+          .catch(() => {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            const fullTime = `${hours}:${minutes}:${seconds}`;
+            push(chatRef, {
+              user: currentUsername,
+              text: message,
+              timestamp: fullTime
+            });
+          });
         messageInput.value = "";
       }
     });

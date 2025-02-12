@@ -250,11 +250,24 @@
           const parts = msg.timestamp.split(":");
           displayTime = parts[0] + ":" + parts[1];
         }
-        msgElement.innerHTML = `<strong>${msg.user}</strong>: ${msg.text} <span class="timestamp">${displayTime}</span>`;
+        let userColor = "#000000";
+        for (const key in leerlingen) {
+          const leerling = leerlingen[key];
+          const fullName = leerling.voornaam + " " + leerling.achternaam;
+          console.log("Vergelijking:", fullName, "=== msg.user:", msg.user);
+          if (fullName === msg.user) {
+            if (leerling.kleur && leerling.kleur !== "") {
+              userColor = leerling.kleur;
+            }
+            break;
+          }
+        }
+        msgElement.innerHTML = `<strong style="color: ${userColor}">${msg.user}</strong>: ${msg.text} <span class="timestamp">${displayTime}</span>`;
         chatbox.appendChild(msgElement);
         chatbox.scrollTop = chatbox.scrollHeight;
       });
     }
+
 
     document.getElementById("sendBtn").addEventListener("click", () => {
       const messageInput = document.getElementById("messageInput");
@@ -299,7 +312,7 @@
 
     const leerlingen = {
             "2223069": { voornaam: "Linde", achternaam: "Constandse" },
-            "2223215": { voornaam: "Benjamin", achternaam: "Tjoa" },
+            "2223215": { voornaam: "Benjamin", achternaam: "Tjoa", kleur: "#34C759" },
             "2324001": { voornaam: "Charlotte", achternaam: "Adema" },
             "2324002": { voornaam: "Yfke", achternaam: "Agterhof" },
             "2324005": { voornaam: "Elena", achternaam: "Al-Kinani" },

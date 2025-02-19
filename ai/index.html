@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat - Benjamin Tjoa</title>
+    <script src="https://js.puter.com/v2/"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: #1c1c1e;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        h1 {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #b0b0b0;
+            font-size: 14px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #2c2c2e;
+            color: white;
+            outline: none;
+            text-align: center;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            background: #0a84ff;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #0071e3;
+        }
+        #output {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        .message {
+            background: #2c2c2e;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .user-message {
+            text-align: right;
+            background: #007aff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Chat</h1>
+        <p>Stel een vraag en krijg direct een antwoord van DeepSeek AI.</p>
+        <input type="text" id="userInput" placeholder="Typ je vraag..." />
+        <button onclick="askAI()">Verstuur</button>
+        <div id="output"></div>
+    </div>
+    
+    <script>
+        async function askAI() {
+            const inputField = document.getElementById('userInput');
+            const input = inputField.value;
+            if (!input) return;
+            inputField.value = "";
+            
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML += `<div class='message user-message'><strong>Jij:</strong> ${input}</div>`;
+            
+            const chatResponse = await puter.ai.chat(input, { model: 'deepseek-chat', stream: true });
+            let responseText = "<div class='message'><strong>AI:</strong> ";
+            
+            for await (const part of chatResponse) {
+                if (part?.text) {
+                    responseText += part.text;
+                    outputDiv.innerHTML = responseText + "</div>";
+                }
+            }
+        }
+    </script>
+</body>
+</html>

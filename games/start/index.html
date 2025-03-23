@@ -382,7 +382,7 @@
       const iframe = document.querySelector("#gamesSection iframe");
       if (iframe && iframe.contentWindow) {
         const messageData = { id: leerlingnummer };
-        iframe.contentWindow.postMessage(messageData, "https://cloud.benjamintjoa.com");
+        iframe.contentWindow.postMessage(messageData, "https://beta.benjamintjoa.com/games/go");
         console.log("PostMessage sent:", messageData);
       }
     }

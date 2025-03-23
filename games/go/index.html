@@ -485,7 +485,7 @@
     // Ontvang het bericht met de gebruikerdata vanuit games.benjamintjoa.com/start
     window.addEventListener("message", function(event) {
       // Controleer of de boodschap van de verwachte bron komt
-      if(event.origin !== "https://games.benjamintjoa.com") return;
+      if(event.origin !== "https://beta.benjamintjoa.com/games/start") return;
       console.log("Bericht ontvangen:", event.data);
       currentUserData = event.data;
       if(event.data.id) {
